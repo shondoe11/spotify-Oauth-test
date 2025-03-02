@@ -1,3 +1,6 @@
+
+#* Build from scratch (without helper libraries). Whitelist other user accounts on dev dashboard if testing other accounts
+
 import os
 import requests
 from datetime import datetime, timedelta
