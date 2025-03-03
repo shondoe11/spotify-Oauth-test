@@ -3,7 +3,7 @@
 
 import os
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask import Flask, redirect, request, jsonify, session
 import urllib.parse
 from dotenv import load_dotenv
@@ -24,12 +24,12 @@ API_BASE_URL = 'https://api.spotify.com/v1/'
 
 #? home page
 @app.route('/')
-def index(): return "Welcome to my Spotify test App <a href='/login'>Login with Spotify</a>"
+def index(): return "Spotify test App <a href='/login'>Login with Spotify</a>"
 
 #? login page
 @app.route('/login')
 def login():
-    scope = 'user-read-private user-read-email'
+    scope = 'user-read-private user-read-email playlist-read-private'
     #! required by Spotify docs
     params = {
         'client_id': CLIENT_ID,
@@ -62,7 +62,7 @@ def callback():
         #~ if ok, spotify returns token info in json
         token_info = response.json()
         #? 3 pieces of key info req by spotify - magic of Oauth
-        session['access_token'] = token_info['access_token'] #~to make req to spotify-api, access_token lasts for 1d
+        session['access_token'] = token_info['access_token'] #~to make req to spotify-api, access_token lasts for 1d by default
         session['refresh_token'] = token_info['refresh_token'] #~to refresh access_token when it expires
         session['expires_at'] = datetime.now().timestamp() + token_info['expires_in'] #~ can modify token_info['expires_in'] to + 10 for example (10 seconds to test refresh token logic)
         #^ gets the current datetime, turned into timestamp (ss epoch) exactly when token expires
